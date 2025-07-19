@@ -1,9 +1,11 @@
 package com.cakeslayer.cakeslayer.repository;
 
 import com.cakeslayer.cakeslayer.model.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<UserEntity,String> {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface UserRepository extends MongoRepository<UserEntity,String> {
+
 
 
 }

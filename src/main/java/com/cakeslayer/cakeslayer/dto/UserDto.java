@@ -1,7 +1,7 @@
 package com.cakeslayer.cakeslayer.dto;
 
 import lombok.Data;
-import org.hibernate.annotations.DialectOverride;
+
 
 @Data
 

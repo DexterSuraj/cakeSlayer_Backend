@@ -1,20 +1,18 @@
 package com.cakeslayer.cakeslayer.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
 
-@Entity
-@Table(name = "users")
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+@Document(collection = "users")
 @Data
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+
     private String password;
 }
