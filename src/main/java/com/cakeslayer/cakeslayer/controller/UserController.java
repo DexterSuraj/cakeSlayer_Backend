@@ -29,7 +29,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Username and password are required.");
             }
 
-            UserEntity checkUser = userService.getByUsername(userDto.getUsername());
+            String checkUser = userService.getByUsername(userDto.getUsername());
             if (checkUser != null) {
                 return ResponseEntity.status(400).body("User already exists");
             }

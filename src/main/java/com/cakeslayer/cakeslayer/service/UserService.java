@@ -10,7 +10,7 @@ abstract public class UserService {
 
     abstract public UserEntity saveUser(String username,String password);
     abstract public List<UserEntity> getAllUser();
-    abstract public UserEntity getByUsername(String username);
+    abstract public String getByUsername(String username);
 
 
 

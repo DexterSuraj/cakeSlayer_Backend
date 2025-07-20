@@ -32,9 +32,9 @@ public class UserServiceImpl extends UserService {
     }
 
     @Override
-    public UserEntity getByUsername(String username) {
+    public String getByUsername(String username) {
     userRepository.findById(username);
-    return null;
+    return username;
     }
 
 
