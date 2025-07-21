@@ -2,6 +2,7 @@ package com.cakeslayer.cakeslayer.model;
 
 
 import lombok.Data;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,4 +16,8 @@ public class UserEntity {
 
 
     private String password;
+
+    private int age;
+
+
 }

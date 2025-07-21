@@ -10,20 +10,20 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//@Bean
+//public PasswordEncoder passwordEncoder() {
+//    return new BCryptPasswordEncoder();}
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for testing APIs
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Required for Postman POST to work
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/signup").permitAll() // allow /signup without auth
-                        .anyRequest().authenticated()           // all other endpoints require auth
+                        .requestMatchers("/signup","/register").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()) // Enable Basic Auth
-                .build();
+                .httpBasic(Customizer.withDefaults()); // Basic Auth still works
+
+        return http.build();
     }
 }

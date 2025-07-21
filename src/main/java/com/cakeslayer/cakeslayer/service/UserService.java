@@ -8,9 +8,9 @@ import java.util.List;
 @Service
 abstract public class UserService {
 
-    abstract public UserEntity saveUser(String username,String password);
+    abstract public UserEntity saveUser(String username,String password,int age);
     abstract public List<UserEntity> getAllUser();
-    abstract public String getByUsername(String username);
+    abstract public UserEntity getByUsername(String username);
 
 
 
