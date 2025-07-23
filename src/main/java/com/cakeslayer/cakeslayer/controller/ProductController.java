@@ -1,4 +1,4 @@
 package com.cakeslayer.cakeslayer.controller;
 
-public class CardController {
+public class ProductController {
 }

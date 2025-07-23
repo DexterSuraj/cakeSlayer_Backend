@@ -2,11 +2,8 @@ package com.cakeslayer.cakeslayer.dto;
 
 import lombok.Data;
 
-
 @Data
-
-public class UserDto {
+public class LoginUserDto {
     private String username;
     private String password;
-    private int age;
 }

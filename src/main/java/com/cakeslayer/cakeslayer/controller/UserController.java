@@ -1,7 +1,9 @@
 package com.cakeslayer.cakeslayer.controller;
 
-import com.cakeslayer.cakeslayer.dto.UserDto;
+import com.cakeslayer.cakeslayer.dto.LoginUserDto;
+import com.cakeslayer.cakeslayer.dto.RegisterUserDto;
 import com.cakeslayer.cakeslayer.model.UserEntity;
+import com.cakeslayer.cakeslayer.repository.UserRepository;
 import com.cakeslayer.cakeslayer.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,32 +16,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+//@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+@Autowired
+    UserRepository userRepository;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> adduser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> adduser(@RequestBody RegisterUserDto registerUserDto) {
         try {
-            if (userDto.getUsername() == null || userDto.getUsername().isBlank()
-                    || userDto.getPassword() == null || userDto.getPassword().isBlank()) {
+            if (registerUserDto.getUsername() == null || registerUserDto.getUsername().isBlank()
+                    || registerUserDto.getPassword() == null || registerUserDto.getPassword().isBlank()) {
                 return ResponseEntity.badRequest().body("Username and password are required.");
             }
 
-            UserEntity checkUser = userService.getByUsername(userDto.getUsername());
+            UserEntity checkUser = userService.getByUsername(registerUserDto.getUsername());
             if (checkUser != null) {
                 return ResponseEntity.status(400).body("User already exists");
             }
 
 //            String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-            UserEntity userEntity = userService.saveUser(userDto.getUsername(), userDto.getPassword(),userDto.getAge());
+            UserEntity userEntity = userService.saveUser(registerUserDto);
 
             return ResponseEntity.status(201).body(userEntity);
         } catch (Exception e) {
@@ -56,19 +65,31 @@ public class UserController {
         }
 
     }
-
     @PostMapping("/login")
-    public ResponseEntity<?> authUser(@RequestBody String username,String password){
-        UserEntity userEntity=new UserEntity();
-        String checkUsername= userEntity.getUsername();
-        String checkPassword= userEntity.getPassword();
-        if(checkPassword.equals(password) && checkUsername.equals(username)){
+    public ResponseEntity<String> authUser(@RequestBody LoginUserDto loginUserDto) {
+        String username = loginUserDto.getUsername();
+        String password = loginUserDto.getPassword();
+        System.out.println(username+" : "+password);
 
-        return new ResponseEntity<>("User Logged IN Succeussfully", HttpStatusCode.valueOf(200));
+        Optional<UserEntity> optionalUser = userRepository.findById(username);
+
+
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
-        else {
-            return new ResponseEntity<>("Enter valid credentials",HttpStatus.BAD_REQUEST);
+
+        UserEntity user = optionalUser.get();
+        System.out.println("optional User: "+user.getUsername()+" : "+user.getPassword());
+
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);
+        } else {
+            if(user.getPassword().equals(loginUserDto.getPassword())){
+                return new ResponseEntity<>("Login succesfull!!",HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
         }
     }
+
 
 }
