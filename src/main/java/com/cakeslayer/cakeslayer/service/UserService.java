@@ -11,7 +11,7 @@ abstract public class UserService {
 
     abstract public UserEntity saveUser(RegisterUserDto registerUserDto);
     abstract public List<UserEntity> getAllUser();
-    abstract public UserEntity getByUsername(String username);
+//    abstract public UserEntity getByUsername(String username);
 
 
 

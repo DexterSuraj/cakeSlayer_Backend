@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-//@RequestMapping("/user")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -34,6 +34,7 @@ public class UserController {
 @Autowired
     UserRepository userRepository;
 
+
     @PostMapping("/signup")
     public ResponseEntity<?> adduser(@RequestBody RegisterUserDto registerUserDto) {
         try {
@@ -42,12 +43,13 @@ public class UserController {
                 return ResponseEntity.badRequest().body("Username and password are required.");
             }
 
-            UserEntity checkUser = userService.getByUsername(registerUserDto.getUsername());
-            if (checkUser != null) {
+            Optional<UserEntity> checkUser = userRepository.findById(registerUserDto.getUsername());
+            if (checkUser.isPresent()) {
                 return ResponseEntity.status(400).body("User already exists");
             }
 
-//            String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+            String encodedPassword = passwordEncoder.encode(registerUserDto.getPassword());
+            registerUserDto.setPassword(encodedPassword);
             UserEntity userEntity = userService.saveUser(registerUserDto);
 
             return ResponseEntity.status(201).body(userEntity);
@@ -84,9 +86,9 @@ public class UserController {
         if (passwordEncoder.matches(password, user.getPassword())) {
             return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);
         } else {
-            if(user.getPassword().equals(loginUserDto.getPassword())){
-                return new ResponseEntity<>("Login succesfull!!",HttpStatus.OK);
-            }
+//            if(user.getPassword().equals(loginUserDto.getPassword())){
+//                return new ResponseEntity<>("Login succesfull!!",HttpStatus.OK);
+//            }
             return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
         }
     }

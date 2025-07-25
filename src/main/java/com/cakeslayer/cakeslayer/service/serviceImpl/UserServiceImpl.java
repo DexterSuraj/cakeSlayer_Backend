@@ -30,11 +30,6 @@ public class UserServiceImpl extends UserService {
         return userRepository.findAll();
     }
 
-    @Override
-    public UserEntity getByUsername(String username) {
-    userRepository.findById(username);
-    return null;
-    }
 
 
 }
