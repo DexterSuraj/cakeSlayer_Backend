@@ -15,7 +15,7 @@ public class CakeslayerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CakeslayerApplication.class, args);
-		System.out.println(new BCryptPasswordEncoder().encode("admin123"));
+
 	}
 
 	@Bean

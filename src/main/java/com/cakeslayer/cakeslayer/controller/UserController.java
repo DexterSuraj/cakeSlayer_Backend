@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    Logger log=Logger.getLogger(String.valueOf(UserController.class));
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,9 +40,11 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> adduser(@RequestBody RegisterUserDto registerUserDto) {
-        try {
+         try{
             if (registerUserDto.getUsername() == null || registerUserDto.getUsername().isBlank()
                     || registerUserDto.getPassword() == null || registerUserDto.getPassword().isBlank()) {
+                log.info("It a Username : "+registerUserDto.getUsername()+"Its a Password : "+registerUserDto.getPassword());
+
                 return ResponseEntity.badRequest().body("Username and password are required.");
             }
 
@@ -51,7 +56,7 @@ public class UserController {
             String encodedPassword = passwordEncoder.encode(registerUserDto.getPassword());
             registerUserDto.setPassword(encodedPassword);
             UserEntity userEntity = userService.saveUser(registerUserDto);
-
+            log.info("encodedPassword"+encodedPassword+userEntity);
             return ResponseEntity.status(201).body(userEntity);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());        }
