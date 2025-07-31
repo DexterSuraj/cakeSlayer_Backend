@@ -86,7 +86,7 @@ public class UserController {
         }
 
         UserEntity user = optionalUser.get();
-        System.out.println("optional User: "+user.getUsername()+" : "+user.getPassword());
+//        System.out.println("optional User: "+user.getUsername()+" : "+user.getPassword());
 
         if (passwordEncoder.matches(password, user.getPassword())) {
             return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);

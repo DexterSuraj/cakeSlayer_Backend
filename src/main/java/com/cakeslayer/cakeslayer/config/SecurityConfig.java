@@ -40,7 +40,7 @@ public class SecurityConfig {
 
                 // Define endpoint access rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/user/**","/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
