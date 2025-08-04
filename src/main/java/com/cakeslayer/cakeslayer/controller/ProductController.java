@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/prod")
 public class ProductController {
     @Autowired
     ProductService productService;
@@ -23,11 +23,16 @@ public class ProductController {
        return ResponseEntity.status(200).body(productService.addProduct(productDto));
     }
 
-    @GetMapping("/products")
+    @GetMapping("/prods")
     public ResponseEntity<List<ProductEntity>> getAllProducts(){
+
         return ResponseEntity.status(200).body(productService.getAllProduct());
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ProductEntity> getById(@RequestParam String id){
+//        return ResponseEntity.status(200).body(productService.getProductById(id));
+//    }
 
 
 }

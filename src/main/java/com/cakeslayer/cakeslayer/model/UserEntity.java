@@ -4,7 +4,10 @@ package com.cakeslayer.cakeslayer.model;
 import com.cakeslayer.cakeslayer.dto.RegisterUserDto;
 import lombok.Data;
 import lombok.NonNull;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -15,6 +18,7 @@ import java.util.Date;
 public class UserEntity {
 
     @Id
+    @Indexed(unique = true)
     private String username;
 
     private String name;
@@ -30,6 +34,9 @@ public class UserEntity {
     private Date date;
 
     private String email;
+
+    @DBRef
+    private ProductEntity productEntity;
 
     public UserEntity toEntity(RegisterUserDto registerUserDto){
         UserEntity userEntity=  new UserEntity();

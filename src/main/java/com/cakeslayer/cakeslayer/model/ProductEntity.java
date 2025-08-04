@@ -3,11 +3,13 @@ package com.cakeslayer.cakeslayer.model;
 import com.cakeslayer.cakeslayer.dto.ProductDto;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-@Document(collation = "product")
+@Document(collation = "en")
 @Data
 public class ProductEntity {
         @Id
+        @Indexed(unique = true)
         private String productId;
         private String title;
         private Long price;

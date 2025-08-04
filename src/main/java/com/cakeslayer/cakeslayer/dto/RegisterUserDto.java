@@ -1,6 +1,7 @@
 package com.cakeslayer.cakeslayer.dto;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 

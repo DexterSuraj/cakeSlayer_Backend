@@ -2,7 +2,6 @@ package com.cakeslayer.cakeslayer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,35 +28,30 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // Enable CORS
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 // Disable CSRF for stateless APIs
                 .csrf(csrf -> csrf.disable())
 
                 // Stateless session management
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // Define endpoint access rules
+                // Permit all requests (for development)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/**","/product/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-
-                // Basic auth (optional, depends on your JWT usage)
-                .httpBasic(Customizer.withDefaults());
+                        .anyRequest().permitAll()
+                );
 
         return http.build();
     }
 
-    // Define allowed origins, methods, headers
+    // Define allowed origins, methods, headers for frontend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // React frontend origin
+        config.setAllowedOrigins(List.of("http://localhost:5173")); // Your React frontend origin
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // only if you're using cookies or auth headers
+        config.setAllowCredentials(true); // needed if cookies/auth headers are used
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
